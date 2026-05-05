@@ -1,0 +1,57 @@
+.campaign-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px;
+  width: 300px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.campaign-card h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.progress-bar {
+  height: 10px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  margin: 10px 0;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #4caf50;
+  transition: width 0.3s ease;
+}
+
+.campaign-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 0.9em;
+}
+
+.current {
+  font-weight: bold;
+  color: #4caf50;
+}
+
+.btn-details {
+  display: block;
+  text-align: center;
+  background-color: #007bff;
+  color: white;
+  padding: 8px;
+  border-radius: 4px;
+  text-decoration: none;
+  margin-top: auto;
+}
+
+.btn-details:hover {
+  background-color: #0056b3;
+}

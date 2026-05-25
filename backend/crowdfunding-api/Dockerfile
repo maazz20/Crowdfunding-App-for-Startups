@@ -1,20 +1,13 @@
-# Use Java 17 image
 FROM eclipse-temurin:17-jdk
 
-# Set working directory
 WORKDIR /app
 
-# Copy project files
 COPY . .
 
-# Give permission to mvnw
-RUN chmod +x mvnw
+RUN apt-get update && apt-get install -y maven
 
-# Build the application
-RUN ./mvnw clean package -DskipTests
+RUN mvn clean package -DskipTests
 
-# Expose port
 EXPOSE 8080
 
-# Run the jar file
-CMD ["java", "-jar", "target/*.jar"]
+CMD ["sh", "-c", "java -jar target/*.jar"]

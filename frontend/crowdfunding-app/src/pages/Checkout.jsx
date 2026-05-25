@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { authAPI } from '../services/api';
-import axios from 'axios';
+import api, { authAPI } from '../services/api';
 
 export default function Checkout() {
     const navigate = useNavigate();
@@ -149,15 +148,14 @@ export default function Checkout() {
                     try {
                         console.log('Payment successful, creating subscription...', response);
                         // Create subscription after successful payment
-                        await axios.post(
-                            'http://localhost:8080/api/subscriptions/create',
+                        await api.post(
+                            '/subscriptions/create',
                             {
                                 subscriptionPlanId: subscriptionPlan.id,
                                 razorpayPaymentId: response.razorpay_payment_id,
                                 amount: amount,
                                 currency: currency
-                            },
-                            { headers: { Authorization: `Bearer ${token}` } }
+                            }
                         );
 
                         setPaymentSuccess(true);

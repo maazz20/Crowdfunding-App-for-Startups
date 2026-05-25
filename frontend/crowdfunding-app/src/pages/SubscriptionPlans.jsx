@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authAPI } from '../services/api';
-import axios from 'axios';
+import api, { authAPI } from '../services/api';
 import './SubscriptionPlans.css';
 
 export default function SubscriptionPlans() {
@@ -24,10 +23,7 @@ export default function SubscriptionPlans() {
             }
             
             const userType = user.role === 'STARTUP' ? 'STARTUP' : 'INVESTOR';
-            const response = await axios.get(
-                `http://localhost:8080/api/subscriptions/plans?userType=${userType}`,
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
+            const response = await api.get(`/subscriptions/plans?userType=${userType}`);
             setPlans(response.data);
         } catch (err) {
             console.error('Failed to fetch subscription plans', err);

@@ -1,17 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { campaignAPI } from '../services/api';
 import CampaignCard from '../components/CampaignCard';
-import { Link } from 'react-router-dom';
+import './CampaignList.css';
 
 export default function CampaignList() {
     const [campaigns, setCampaigns] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [query, setQuery] = useState('');
+    const [sortBy, setSortBy] = useState('progress');
 
     useEffect(() => {
         campaignAPI.getAll()
             .then((res) => {
-                setCampaigns(res.data);
+                setCampaigns(res.data || []);
                 setLoading(false);
             })
             .catch((err) => {
@@ -20,23 +23,72 @@ export default function CampaignList() {
             });
     }, []);
 
-    if (loading) return <div className="loading">Loading campaigns...</div>;
+    const visibleCampaigns = useMemo(() => {
+        const normalizedQuery = query.trim().toLowerCase();
+        return [...campaigns]
+            .filter((campaign) => {
+                if (!normalizedQuery) return true;
+                return `${campaign.title} ${campaign.description} ${campaign.category?.categoryName}`
+                    .toLowerCase()
+                    .includes(normalizedQuery);
+            })
+            .sort((a, b) => {
+                const aProgress = Number(a.currentAmount || 0) / Number(a.targetAmount || 1);
+                const bProgress = Number(b.currentAmount || 0) / Number(b.targetAmount || 1);
+                if (sortBy === 'target') return Number(b.targetAmount || 0) - Number(a.targetAmount || 0);
+                if (sortBy === 'newest') return Number(b.id || 0) - Number(a.id || 0);
+                return bProgress - aProgress;
+            });
+    }, [campaigns, query, sortBy]);
+
+    if (loading) return <div className="loading surface">Loading campaigns...</div>;
     if (error) return <div className="error">Error: {error}</div>;
 
     return (
-        <div className="campaigns-container" style={{ padding: '20px' }}>
-            <div className="header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                <h1>Active Campaigns</h1>
-                <Link to="/create-campaign" className="btn-primary" style={{ padding: '10px 20px', backgroundColor: '#4caf50', color: 'white', textDecoration: 'none', borderRadius: '4px' }}>
-                    + Create Campaign
-                </Link>
+        <div className="app-shell campaigns-page">
+            <div className="page-header">
+                <div>
+                    <p className="eyebrow">Explore opportunities</p>
+                    <h1 className="page-title">Active Campaigns</h1>
+                    <p className="page-subtitle">
+                        Search live startup campaigns, compare their traction, and open the ones worth backing.
+                    </p>
+                </div>
+                <Link to="/create-campaign" className="btn btn-success">+ Create Campaign</Link>
             </div>
 
-            <div className="campaigns-grid" style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
-                {campaigns.map((campaign) => (
-                    <CampaignCard key={campaign.id} campaign={campaign} />
-                ))}
+            <div className="campaign-toolbar surface">
+                <label>
+                    <span>Search</span>
+                    <input
+                        type="search"
+                        placeholder="Search by title, category, or description"
+                        value={query}
+                        onChange={(event) => setQuery(event.target.value)}
+                    />
+                </label>
+                <label>
+                    <span>Sort by</span>
+                    <select value={sortBy} onChange={(event) => setSortBy(event.target.value)}>
+                        <option value="progress">Funding progress</option>
+                        <option value="target">Largest target</option>
+                        <option value="newest">Newest first</option>
+                    </select>
+                </label>
             </div>
+
+            {visibleCampaigns.length === 0 ? (
+                <div className="empty-state surface">
+                    <h2>No campaigns found</h2>
+                    <p>Try a different search term or clear the search field.</p>
+                </div>
+            ) : (
+                <div className="campaigns-grid">
+                    {visibleCampaigns.map((campaign) => (
+                        <CampaignCard key={campaign.id} campaign={campaign} />
+                    ))}
+                </div>
+            )}
         </div>
     );
 }

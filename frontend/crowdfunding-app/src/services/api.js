@@ -66,6 +66,7 @@ export const metaAPI = {
 export const userAPI = {
   getAll: () => api.get('/users'),
   getById: (id) => api.get(`/users/${id}`),
+  changePassword: (data) => api.put('/users/change-password', data),
 };
 
 export default api;

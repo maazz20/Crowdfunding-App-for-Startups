@@ -1,0 +1,135 @@
+.detail-hero {
+  display: grid;
+  gap: 28px;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  margin-bottom: 22px;
+  padding: 28px;
+}
+
+.detail-hero h1 {
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1.02;
+  margin: 18px 0 16px;
+}
+
+.detail-hero p {
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.detail-summary {
+  background: #f8fbff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.detail-summary strong {
+  color: var(--success);
+  display: block;
+  font-size: 2rem;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.detail-summary > span,
+.muted-text {
+  color: var(--muted);
+}
+
+.progress-bar-lg {
+  background: #e8eef6;
+  border-radius: 999px;
+  height: 18px;
+  margin: 20px 0 12px;
+  overflow: hidden;
+}
+
+.detail-summary-row {
+  color: var(--muted);
+  display: flex;
+  font-size: 0.92rem;
+  justify-content: space-between;
+}
+
+.detail-grid {
+  align-items: start;
+  display: grid;
+  gap: 22px;
+  grid-template-columns: minmax(0, 0.92fr) minmax(280px, 0.55fr);
+}
+
+.contributions-list {
+  display: grid;
+  gap: 10px;
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+}
+
+.contributions-list li {
+  align-items: center;
+  background: #f8fbff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 14px;
+  transition: transform 180ms ease, border-color 180ms ease;
+}
+
+.contributions-list li:hover {
+  border-color: rgba(22, 185, 129, 0.38);
+  transform: translateX(3px);
+}
+
+.contributions-list strong {
+  color: var(--success);
+}
+
+.contribution-form h2 {
+  margin-top: 0;
+}
+
+.quick-amounts {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.quick-amounts button {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  cursor: pointer;
+  font-weight: 800;
+  padding: 12px;
+  transition: background 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.quick-amounts button:hover,
+.quick-amounts button.active {
+  background: var(--primary-soft);
+  border-color: rgba(51, 102, 255, 0.45);
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.error-text {
+  color: var(--danger);
+  font-weight: 700;
+  margin: 0;
+}
+
+@media (max-width: 850px) {
+  .detail-hero,
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-amounts {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

@@ -12,129 +12,15 @@ export default function Checkout() {
     const [loading, setLoading] = useState(false);
     const [paymentSuccess, setPaymentSuccess] = useState(false);
 
-    if (!user) {
-        return (
-            <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
-                <h2>Session Expired</h2>
-                <p>Your session has expired. Please log in again to complete your purchase.</p>
-                <button 
-                    onClick={() => navigate('/login')}
-                    style={{
-                        padding: '10px 20px',
-                        backgroundColor: '#007bff',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                        fontWeight: 'bold'
-                    }}
-                >
-                    Go to Login
-                </button>
-            </div>
-        );
-    }
-
-    if (!subscriptionPlan) {
-        return (
-            <div style={{ padding: '20px' }}>
-                Invalid subscription plan. 
-                <button onClick={() => navigate('/')} style={{ marginLeft: '10px' }}>
-                    Go Home
-                </button>
-            </div>
-        );
-    }
-
-    if (paymentSuccess) {
-        return (
-            <div className="success-container" style={{ 
-                maxWidth: '500px', 
-                margin: '100px auto', 
-                padding: '40px', 
-                textAlign: 'center',
-                backgroundColor: '#f8f9fa',
-                borderRadius: '8px',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-            }}>
-                <div style={{
-                    fontSize: '60px',
-                    color: '#28a745',
-                    marginBottom: '20px'
-                }}>✓</div>
-                
-                <h1 style={{ color: '#333', marginBottom: '10px', fontSize: '28px' }}>
-                    Payment Successful!
-                </h1>
-                
-                <p style={{ color: '#666', fontSize: '16px', marginBottom: '10px', lineHeight: '1.6' }}>
-                    Your subscription has been activated successfully.
-                </p>
-
-                <div style={{
-                    backgroundColor: '#e8f5e9',
-                    padding: '20px',
-                    borderRadius: '6px',
-                    marginBottom: '30px',
-                    borderLeft: '4px solid #28a745'
-                }}>
-                    <p style={{ margin: '5px 0', color: '#333', fontWeight: 'bold' }}>
-                        {subscriptionPlan.durationMonths} Month Subscription
-                    </p>
-                    <p style={{ margin: '5px 0', color: '#666' }}>
-                        {getCurrencySymbol()}{getPriceForCurrency()}
-                    </p>
-                </div>
-                
-                <p style={{ color: '#999', fontSize: '14px', marginBottom: '30px' }}>
-                    You now have access to all premium features. Enjoy exploring the platform!
-                </p>
-                
-                <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-                    <button
-                        onClick={() => navigate('/dashboard')}
-                        style={{
-                            padding: '12px 30px',
-                            backgroundColor: '#28a745',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '4px',
-                            cursor: 'pointer',
-                            fontSize: '16px',
-                            fontWeight: 'bold'
-                        }}
-                    >
-                        Go to Dashboard
-                    </button>
-                    <button
-                        onClick={() => navigate('/')}
-                        style={{
-                            padding: '12px 30px',
-                            backgroundColor: '#6c757d',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '4px',
-                            cursor: 'pointer',
-                            fontSize: '16px',
-                            fontWeight: 'bold'
-                        }}
-                    >
-                        Back to Home
-                    </button>
-                </div>
-            </div>
-        );
-    }
-
     const getPriceForCurrency = () => {
         switch (currency) {
             case 'USD':
-                return subscriptionPlan.priceUSD;
+                return subscriptionPlan?.priceUSD;
             case 'EUR':
-                return subscriptionPlan.priceEUR;
+                return subscriptionPlan?.priceEUR;
             case 'INR':
             default:
-                return subscriptionPlan.priceINR;
+                return subscriptionPlan?.priceINR;
         }
     };
 
@@ -149,6 +35,76 @@ export default function Checkout() {
                 return '₹';
         }
     };
+
+    if (!user) {
+        return (
+            <div className="app-shell auth-shell">
+                <h2>Session Expired</h2>
+                <p>Your session has expired. Please log in again to complete your purchase.</p>
+                <button 
+                    onClick={() => navigate('/login')}
+                    className="btn btn-primary"
+                >
+                    Go to Login
+                </button>
+            </div>
+        );
+    }
+
+    if (!subscriptionPlan) {
+        return (
+            <div className="app-shell">
+                Invalid subscription plan. 
+                <button onClick={() => navigate('/')} className="btn btn-primary" style={{ marginLeft: '10px' }}>
+                    Go Home
+                </button>
+            </div>
+        );
+    }
+
+    if (paymentSuccess) {
+        return (
+            <div className="app-shell">
+            <div className="surface success-card">
+                <div className="success-mark">✓</div>
+                <h1>
+                    Payment Successful!
+                </h1>
+                <p className="muted-text">
+                    Your subscription has been activated successfully.
+                </p>
+
+                <div className="notice success">
+                    <p style={{ margin: '5px 0', color: '#333', fontWeight: 'bold' }}>
+                        {subscriptionPlan.durationMonths} Month Subscription
+                    </p>
+                    <p style={{ margin: '5px 0', color: '#666' }}>
+                        {getCurrencySymbol()}{getPriceForCurrency()}
+                    </p>
+                </div>
+                
+                <p className="muted-text">
+                    You now have access to all premium features. Enjoy exploring the platform!
+                </p>
+                
+                <div className="actions center">
+                    <button
+                        onClick={() => navigate('/dashboard')}
+                        className="btn btn-success"
+                    >
+                        Go to Dashboard
+                    </button>
+                    <button
+                        onClick={() => navigate('/')}
+                        className="btn btn-muted"
+                    >
+                        Back to Home
+                    </button>
+                </div>
+            </div>
+            </div>
+        );
+    }
 
     const handlePayment = async () => {
         setLoading(true);
@@ -231,20 +187,14 @@ export default function Checkout() {
     };
 
     return (
-        <div style={{ maxWidth: '600px', margin: '0 auto', padding: '20px' }}>
+        <div className="app-shell auth-shell">
             <button onClick={() => navigate(-1)} className="back-button">
                 ← Back
             </button>
 
-            <h1>Checkout</h1>
+            <h1 className="page-title">Checkout</h1>
 
-            <div style={{
-                border: '1px solid #ddd',
-                borderRadius: '8px',
-                padding: '20px',
-                backgroundColor: '#f9f9f9',
-                marginBottom: '20px'
-            }}>
+            <div className="surface panel" style={{ marginTop: '20px', marginBottom: '20px' }}>
                 <h2>Order Summary</h2>
                 
                 <div style={{ marginBottom: '15px', borderBottom: '1px solid #ddd', paddingBottom: '15px' }}>
@@ -274,13 +224,7 @@ export default function Checkout() {
                 </div>
             </div>
 
-            <div style={{
-                backgroundColor: '#f0f7ff',
-                padding: '15px',
-                borderRadius: '8px',
-                marginBottom: '20px',
-                borderLeft: '4px solid #007bff'
-            }}>
+            <div className="notice" style={{ marginBottom: '20px' }}>
                 <p style={{ margin: 0, color: '#333' }}>
                     <strong>Note:</strong> You will be redirected to Razorpay payment gateway to complete the transaction securely.
                 </p>
@@ -289,35 +233,16 @@ export default function Checkout() {
             <button
                 onClick={handlePayment}
                 disabled={loading}
-                style={{
-                    width: '100%',
-                    padding: '14px',
-                    backgroundColor: loading ? '#cccccc' : '#007bff',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: loading ? 'not-allowed' : 'pointer',
-                    fontWeight: 'bold',
-                    fontSize: '16px'
-                }}
+                className="btn btn-primary"
+                style={{ width: '100%' }}
             >
                 {loading ? 'Processing...' : `Pay ${getCurrencySymbol()}${getPriceForCurrency()}`}
             </button>
 
             <button
                 onClick={() => navigate(-1)}
-                style={{
-                    width: '100%',
-                    padding: '14px',
-                    backgroundColor: '#f0f0f0',
-                    color: '#333',
-                    border: '1px solid #ddd',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    fontWeight: 'bold',
-                    fontSize: '16px',
-                    marginTop: '10px'
-                }}
+                className="btn btn-muted"
+                style={{ width: '100%', marginTop: '10px' }}
             >
                 Cancel
             </button>

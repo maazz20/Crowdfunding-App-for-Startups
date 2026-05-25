@@ -1,193 +1,113 @@
 import { Link } from 'react-router-dom';
 import { authAPI } from '../services/api';
+import './Home.css';
+
+const features = [
+    {
+        icon: '01',
+        title: 'Launch with clarity',
+        text: 'Build a campaign page, choose funding goals, and give backers a clear reason to believe.',
+    },
+    {
+        icon: '02',
+        title: 'Discover startups',
+        text: 'Browse active campaigns, compare progress, and support founders building promising ideas.',
+    },
+    {
+        icon: '03',
+        title: 'Track momentum',
+        text: 'Follow funding progress, contributions, approvals, and campaign performance from one place.',
+    },
+];
 
 export default function Home() {
     const user = authAPI.getCurrentUser();
 
     return (
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 20px' }}>
-            {/* Hero Section */}
-            <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-                <h1 style={{ fontSize: '3rem', marginBottom: '20px', color: '#1a1a1a' }}>
-                    Welcome to CrowdFund
-                </h1>
-                <p style={{ fontSize: '1.3rem', color: '#555555', marginBottom: '30px', lineHeight: '1.6' }}>
-                    Empowering startups and connecting them with investors worldwide
-                </p>
-                
-                {!user && (
-                    <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', marginTop: '30px' }}>
-                        <Link 
-                            to="/register" 
-                            style={{ 
-                                padding: '15px 40px', 
-                                backgroundColor: '#007bff', 
-                                color: 'white', 
-                                textDecoration: 'none', 
-                                borderRadius: '8px',
-                                fontSize: '1.1rem',
-                                fontWeight: 'bold'
-                            }}
-                        >
-                            Get Started
-                        </Link>
-                        <Link 
-                            to="/login" 
-                            style={{ 
-                                padding: '15px 40px', 
-                                backgroundColor: '#6c757d', 
-                                color: 'white', 
-                                textDecoration: 'none', 
-                                borderRadius: '8px',
-                                fontSize: '1.1rem',
-                                fontWeight: 'bold'
-                            }}
-                        >
-                            Login
-                        </Link>
-                    </div>
-                )}
-                
-                {user && (
-                    <div style={{ marginTop: '30px' }}>
-                        <Link 
-                            to="/campaigns" 
-                            style={{ 
-                                padding: '15px 40px', 
-                                backgroundColor: '#28a745', 
-                                color: 'white', 
-                                textDecoration: 'none', 
-                                borderRadius: '8px',
-                                fontSize: '1.1rem',
-                                fontWeight: 'bold'
-                            }}
-                        >
-                            Browse Campaigns
-                        </Link>
-                    </div>
-                )}
-            </div>
-
-            {/* Features Section */}
-            <div style={{ marginBottom: '60px' }}>
-                <h2 style={{ textAlign: 'center', fontSize: '2.5rem', marginBottom: '40px', color: '#1a1a1a' }}>
-                    How It Works
-                </h2>
-                
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
-                    {/* For Startups */}
-                    <div style={{ 
-                        padding: '30px', 
-                        border: '2px solid #007bff', 
-                        borderRadius: '12px',
-                        backgroundColor: '#f8f9fa'
-                    }}>
-                        <div style={{ fontSize: '3rem', marginBottom: '15px' }}>🚀</div>
-                        <h3 style={{ color: '#007bff', marginBottom: '15px' }}>For Startups</h3>
-                        <ul style={{ lineHeight: '1.8', color: '#555' }}>
-                            <li>Create compelling campaign pages</li>
-                            <li>Set funding goals and timelines</li>
-                            <li>Track contributions in real-time</li>
-                            <li>Manage your campaign dashboard</li>
-                            <li>Connect with potential investors</li>
-                        </ul>
-                    </div>
-
-                    {/* For Investors */}
-                    <div style={{ 
-                        padding: '30px', 
-                        border: '2px solid #28a745', 
-                        borderRadius: '12px',
-                        backgroundColor: '#f8f9fa'
-                    }}>
-                        <div style={{ fontSize: '3rem', marginBottom: '15px' }}>💰</div>
-                        <h3 style={{ color: '#28a745', marginBottom: '15px' }}>For Investors</h3>
-                        <ul style={{ lineHeight: '1.8', color: '#555' }}>
-                            <li>Discover innovative startups</li>
-                            <li>Browse campaigns by category</li>
-                            <li>Make secure contributions</li>
-                            <li>Track your investment portfolio</li>
-                            <li>Support entrepreneurs you believe in</li>
-                        </ul>
-                    </div>
-
-                    {/* Platform Features */}
-                    <div style={{ 
-                        padding: '30px', 
-                        border: '2px solid #ffc107', 
-                        borderRadius: '12px',
-                        backgroundColor: '#f8f9fa'
-                    }}>
-                        <div style={{ fontSize: '3rem', marginBottom: '15px' }}>⚡</div>
-                        <h3 style={{ color: '#ffc107', marginBottom: '15px' }}>Platform Features</h3>
-                        <ul style={{ lineHeight: '1.8', color: '#555' }}>
-                            <li>Secure authentication system</li>
-                            <li>Admin campaign approval</li>
-                            <li>Multiple currency support</li>
-                            <li>Real-time progress tracking</li>
-                            <li>Transparent contribution history</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            {/* Why Choose Us Section */}
-            <div style={{ 
-                backgroundColor: '#007bff', 
-                color: 'white', 
-                padding: '50px 30px', 
-                borderRadius: '12px',
-                textAlign: 'center',
-                marginBottom: '60px'
-            }}>
-                <h2 style={{ fontSize: '2.5rem', marginBottom: '20px' }}>Why Choose CrowdFund?</h2>
-                <p style={{ fontSize: '1.2rem', lineHeight: '1.8', maxWidth: '800px', margin: '0 auto' }}>
-                    We provide a secure, transparent, and user-friendly platform that connects innovative startups 
-                    with passionate investors. Our role-based system ensures that startups can focus on creating 
-                    great campaigns while investors can easily discover and support promising ventures.
-                </p>
-            </div>
-
-            {/* Call to Action */}
-            {!user && (
-                <div style={{ textAlign: 'center', marginTop: '60px' }}>
-                    <h2 style={{ fontSize: '2rem', marginBottom: '20px', color: '#1a1a1a' }}>
-                        Ready to Get Started?
-                    </h2>
-                    <p style={{ fontSize: '1.1rem', color: '#555555', marginBottom: '30px' }}>
-                        Join our community of entrepreneurs and investors today!
+        <div className="home-page">
+            <section className="home-hero">
+                <div className="hero-content">
+                    <p className="eyebrow">Startup funding, simplified</p>
+                    <h1>Fund ideas that deserve a real first push.</h1>
+                    <p>
+                        CrowdFund connects founders and investors through transparent campaigns,
+                        secure contributions, and practical dashboards built for daily use.
                     </p>
-                    <div style={{ display: 'flex', gap: '20px', justifyContent: 'center' }}>
-                        <Link 
-                            to="/register" 
-                            style={{ 
-                                padding: '15px 40px', 
-                                backgroundColor: '#007bff', 
-                                color: 'white', 
-                                textDecoration: 'none', 
-                                borderRadius: '8px',
-                                fontSize: '1.1rem',
-                                fontWeight: 'bold'
-                            }}
-                        >
-                            Register as Startup
-                        </Link>
-                        <Link 
-                            to="/register" 
-                            style={{ 
-                                padding: '15px 40px', 
-                                backgroundColor: '#28a745', 
-                                color: 'white', 
-                                textDecoration: 'none', 
-                                borderRadius: '8px',
-                                fontSize: '1.1rem',
-                                fontWeight: 'bold'
-                            }}
-                        >
-                            Register as Investor
-                        </Link>
+                    <div className="actions">
+                        {user ? (
+                            <Link to="/campaigns" className="btn btn-primary">Browse Campaigns</Link>
+                        ) : (
+                            <>
+                                <Link to="/register" className="btn btn-primary">Get Started</Link>
+                                <Link to="/login" className="btn btn-outline">Login</Link>
+                            </>
+                        )}
                     </div>
                 </div>
+
+                <div className="hero-board" aria-label="Campaign activity preview">
+                    <div className="hero-card featured">
+                        <span className="status-pill">Trending</span>
+                        <h3>Solar cold chain for farms</h3>
+                        <div className="hero-progress">
+                            <span style={{ width: '72%' }} />
+                        </div>
+                        <div className="hero-card-row">
+                            <strong>72% funded</strong>
+                            <span>148 backers</span>
+                        </div>
+                    </div>
+                    <div className="hero-mini-grid">
+                        <div>
+                            <strong>89</strong>
+                            <span>Active campaigns</span>
+                        </div>
+                        <div>
+                            <strong>24h</strong>
+                            <span>Fast approvals</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section className="home-section">
+                <div className="page-header">
+                    <div>
+                        <p className="eyebrow">How it works</p>
+                        <h2>Everything has a next action.</h2>
+                    </div>
+                    <Link to="/campaigns" className="btn btn-muted">Explore</Link>
+                </div>
+                <div className="feature-grid">
+                    {features.map((feature) => (
+                        <article className="feature-card" key={feature.title}>
+                            <span>{feature.icon}</span>
+                            <h3>{feature.title}</h3>
+                            <p>{feature.text}</p>
+                        </article>
+                    ))}
+                </div>
+            </section>
+
+            <section className="home-band">
+                <div>
+                    <p className="eyebrow">Why CrowdFund</p>
+                    <h2>Clean workflows for founders, backers, and admins.</h2>
+                </div>
+                <p>
+                    Role-based access keeps the platform focused: startups create and manage
+                    campaigns, investors contribute, and admins review submissions before they go live.
+                </p>
+            </section>
+
+            {!user && (
+                <section className="home-cta">
+                    <h2>Choose your starting point.</h2>
+                    <div className="actions center">
+                        <Link to="/register" className="btn btn-primary">Register as Startup</Link>
+                        <Link to="/register" className="btn btn-success">Register as Investor</Link>
+                    </div>
+                </section>
             )}
         </div>
     );

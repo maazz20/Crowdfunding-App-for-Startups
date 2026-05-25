@@ -67,15 +67,20 @@ export default function Dashboard() {
     };
 
     if (!user) return null;
-    if (loading) return <div style={{ padding: '20px' }}>Loading...</div>;
+    if (loading) return <div className="loading surface">Loading dashboard...</div>;
 
     return (
-        <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
+        <div className="app-shell">
             <button onClick={() => navigate(-1)} className="back-button">
                 ← Back
             </button>
             
-            <h1>Dashboard - {user.role}</h1>
+            <div className="page-header">
+                <div>
+                    <p className="eyebrow">Workspace</p>
+                    <h1 className="page-title">Dashboard - {user.role}</h1>
+                </div>
+            </div>
 
             {user.role === 'STARTUP' && (
                 <div>
@@ -83,9 +88,9 @@ export default function Dashboard() {
                     {campaigns.length === 0 ? (
                         <p>You haven't created any campaigns yet. <Link to="/create-campaign">Create one now!</Link></p>
                     ) : (
-                        <div style={{ display: 'grid', gap: '15px' }}>
+                        <div className="list-stack">
                             {campaigns.map(campaign => (
-                                <div key={campaign.id} style={{ border: '1px solid #ddd', padding: '15px', borderRadius: '8px' }}>
+                                <div key={campaign.id} className="list-card surface">
                                     <h3>{campaign.title}</h3>
                                     <p><strong>Status:</strong> {campaign.status}</p>
                                     <p><strong>Target:</strong> {campaign.currency.symbol}{campaign.targetAmount}</p>
@@ -104,9 +109,9 @@ export default function Dashboard() {
                     {contributions.length === 0 ? (
                         <p>You haven't made any contributions yet. <Link to="/">Browse campaigns</Link></p>
                     ) : (
-                        <div style={{ display: 'grid', gap: '15px' }}>
+                        <div className="list-stack">
                             {contributions.map(contribution => (
-                                <div key={contribution.id} style={{ border: '1px solid #ddd', padding: '15px', borderRadius: '8px' }}>
+                                <div key={contribution.id} className="list-card surface">
                                     <h3>{contribution.campaign.title}</h3>
                                     <p><strong>Amount:</strong> {contribution.campaign.currency.symbol}{contribution.amount}</p>
                                     <p><strong>Date:</strong> {new Date(contribution.contributedAt).toLocaleDateString()}</p>
@@ -124,9 +129,9 @@ export default function Dashboard() {
                     {pendingCampaigns.length === 0 ? (
                         <p>No pending campaigns to review.</p>
                     ) : (
-                        <div style={{ display: 'grid', gap: '15px', marginBottom: '30px' }}>
+                        <div className="list-stack" style={{ marginBottom: '30px' }}>
                             {pendingCampaigns.map(campaign => (
-                                <div key={campaign.id} style={{ border: '2px solid #ffa500', padding: '15px', borderRadius: '8px' }}>
+                                <div key={campaign.id} className="list-card surface" style={{ borderColor: '#f59e0b' }}>
                                     <h3>{campaign.title}</h3>
                                     <p>{campaign.description.substring(0, 100)}...</p>
                                     <p><strong>Creator:</strong> {campaign.creator.name}</p>
@@ -134,7 +139,7 @@ export default function Dashboard() {
                                     <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
                                         <button 
                                             onClick={() => handleApproveCampaign(campaign.id)}
-                                            style={{ padding: '8px 16px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                                            className="btn btn-success"
                                         >
                                             Approve
                                         </button>
@@ -146,9 +151,9 @@ export default function Dashboard() {
                     )}
 
                     <h2>All Campaigns</h2>
-                    <div style={{ display: 'grid', gap: '15px' }}>
+                    <div className="list-stack">
                         {campaigns.map(campaign => (
-                            <div key={campaign.id} style={{ border: '1px solid #ddd', padding: '15px', borderRadius: '8px' }}>
+                            <div key={campaign.id} className="list-card surface">
                                 <h3>{campaign.title}</h3>
                                 <p><strong>Status:</strong> {campaign.status}</p>
                                 <p><strong>Creator:</strong> {campaign.creator.name}</p>
@@ -159,7 +164,7 @@ export default function Dashboard() {
                                     {campaign.currentAmount >= campaign.targetAmount && (
                                         <button 
                                             onClick={() => handleDeleteCampaign(campaign.id)}
-                                            style={{ padding: '8px 16px', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                                            className="btn btn-danger"
                                         >
                                             Delete
                                         </button>

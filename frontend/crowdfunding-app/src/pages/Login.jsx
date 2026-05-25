@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { authAPI } from '../services/api';
+import PasswordField from '../components/PasswordField';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -20,31 +21,28 @@ export default function Login() {
   };
 
   return (
-    <div style={{ padding: '40px', maxWidth: '400px', margin: '0 auto' }}>
+    <div className="app-shell auth-shell">
       <button onClick={() => navigate(-1)} className="back-button">
         ← Back
       </button>
       
-      <h1>Login</h1>
+      <h1 className="page-title">Login</h1>
       {error && <p style={{ color: '#dc3545', padding: '10px', backgroundColor: '#ffe0e0', borderRadius: '4px' }}>{error}</p>}
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+      <form onSubmit={handleSubmit} className="surface form-card form-grid" style={{ marginTop: '20px' }}>
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          style={{ padding: '10px', border: '1px solid #ddd', borderRadius: '4px' }}
         />
-        <input
-          type="password"
+        <PasswordField
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          style={{ padding: '10px', border: '1px solid #ddd', borderRadius: '4px' }}
         />
-        <button type="submit" style={{ padding: '10px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>
+        <button type="submit" className="btn btn-primary">
           Login
         </button>
       </form>

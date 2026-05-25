@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { campaignAPI, contributionAPI } from '../services/api';
 import ContributionForm from '../components/ContributionForm';
+import './CampaignDetail.css';
+
+const formatAmount = (value) => Number(value || 0).toLocaleString();
 
 export default function CampaignDetail() {
     const { id } = useParams();
@@ -17,7 +20,7 @@ export default function CampaignDetail() {
         ])
             .then(([campaignRes, contributionsRes]) => {
                 setCampaign(campaignRes.data);
-                setContributions(contributionsRes.data);
+                setContributions(contributionsRes.data || []);
                 setLoading(false);
             })
             .catch(err => {
@@ -26,46 +29,57 @@ export default function CampaignDetail() {
             });
     }, [id]);
 
-    if (loading) return <div>Loading...</div>;
-    if (!campaign) return <div>Campaign not found</div>;
+    if (loading) return <div className="loading surface">Loading campaign...</div>;
+    if (!campaign) return <div className="empty-state surface">Campaign not found</div>;
 
-    const progressPercent = Math.min((campaign.currentAmount / campaign.targetAmount) * 100, 100);
-
+    const currentAmount = Number(campaign.currentAmount || 0);
+    const targetAmount = Number(campaign.targetAmount || 0);
+    const progressPercent = targetAmount ? Math.min((currentAmount / targetAmount) * 100, 100) : 0;
     const currencySymbol = campaign.currency?.symbol || '$';
 
     return (
-        <div className="campaign-detail" style={{ maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
+        <div className="app-shell campaign-detail">
             <button onClick={() => navigate(-1)} className="back-button">
                 ← Back
             </button>
-            
-            <h1>{campaign.title}</h1>
-            <p style={{ lineHeight: '1.6', color: '#555' }}>{campaign.description}</p>
 
-            <div className="progress-section" style={{ margin: '30px 0' }}>
-                <div className="progress-bar-lg" style={{ height: '20px', backgroundColor: '#f0f0f0', borderRadius: '10px', overflow: 'hidden' }}>
-                    <div className="progress-fill" style={{ width: `${progressPercent}%`, height: '100%', backgroundColor: '#4caf50' }}></div>
+            <section className="detail-hero surface">
+                <div>
+                    <span className="status-pill">{campaign.status || 'Active'}</span>
+                    <h1>{campaign.title}</h1>
+                    <p>{campaign.description}</p>
                 </div>
-                <p style={{ marginTop: '10px', fontSize: '1.2rem' }}>
-                    <strong style={{ color: '#4caf50' }}>{currencySymbol}{campaign.currentAmount}</strong> raised of {currencySymbol}{campaign.targetAmount}
-                    <span style={{ color: '#888', marginLeft: '10px' }}>({contributions.length} backers)</span>
-                </p>
-            </div>
+                <div className="detail-summary">
+                    <strong>{currencySymbol}{formatAmount(currentAmount)}</strong>
+                    <span>raised of {currencySymbol}{formatAmount(targetAmount)}</span>
+                    <div className="progress-bar-lg">
+                        <div className="progress-fill" style={{ width: `${progressPercent}%` }} />
+                    </div>
+                    <div className="detail-summary-row">
+                        <span>{Math.round(progressPercent)}% funded</span>
+                        <span>{contributions.length} backers</span>
+                    </div>
+                </div>
+            </section>
 
-            <ContributionForm campaignId={campaign.id} campaign={campaign} currency={campaign.currency} onSuccess={() => window.location.reload()} />
+            <div className="detail-grid">
+                <ContributionForm campaignId={campaign.id} campaign={campaign} currency={campaign.currency} onSuccess={() => window.location.reload()} />
 
-            <div className="contributions-list" style={{ marginTop: '40px' }}>
-                <h3>Recent Contributions</h3>
-                {contributions.length === 0 ? <p>No contributions yet. Be the first!</p> : (
-                    <ul style={{ listStyle: 'none', padding: 0 }}>
-                        {contributions.map((contrib) => (
-                            <li key={contrib.id} className="contribution-item" style={{ padding: '10px', borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'space-between' }}>
-                                <span style={{ fontWeight: 'bold' }}>{contrib.contributor.name}</span>
-                                <span className="amount" style={{ color: '#4caf50' }}>{currencySymbol}{contrib.amount}</span>
-                            </li>
-                        ))}
-                    </ul>
-                )}
+                <section className="surface panel">
+                    <h2>Recent Contributions</h2>
+                    {contributions.length === 0 ? (
+                        <p className="muted-text">No contributions yet. Be the first to back it.</p>
+                    ) : (
+                        <ul className="contributions-list">
+                            {contributions.map((contrib) => (
+                                <li key={contrib.id}>
+                                    <span>{contrib.contributor?.name || 'Backer'}</span>
+                                    <strong>{currencySymbol}{formatAmount(contrib.amount)}</strong>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </section>
             </div>
         </div>
     );

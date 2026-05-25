@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { authAPI, metaAPI } from '../services/api';
+import PasswordField from '../components/PasswordField';
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -24,7 +25,7 @@ export default function Register() {
   const passwordValidation = {
     length: /^.{8,}$/, // At least 8 characters
     uppercase: /[A-Z]/, // At least one uppercase letter
-    special: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/, // Special character
+    special: /[^A-Za-z0-9]/, // Special character
     digit: /\d/, // At least one digit
   };
 
@@ -46,9 +47,6 @@ export default function Register() {
         // Filter out ADMIN role from registration
         const filteredTypes = response.data.filter(type => type.typeName !== 'ADMIN');
         setUserTypes(filteredTypes);
-        if (filteredTypes.length > 0) {
-          setFormData(prev => ({ ...prev, userTypeId: filteredTypes[0].id }));
-        }
       } catch (err) {
         console.error('Failed to fetch user types', err);
       }
@@ -86,21 +84,20 @@ export default function Register() {
   const isPasswordValid = !Object.values(passwordErrors).some(error => error);
 
   return (
-    <div style={{ padding: '40px', maxWidth: '500px', margin: '0 auto' }}>
+    <div className="app-shell auth-shell">
       <button onClick={() => navigate(-1)} className="back-button">
         ← Back
       </button>
 
-      <h1>Register</h1>
+      <h1 className="page-title">Register</h1>
       {error && <p style={{ color: 'red', padding: '10px', backgroundColor: '#ffe0e0', borderRadius: '4px' }}>{error}</p>}
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+      <form onSubmit={handleSubmit} className="surface form-card form-grid" style={{ marginTop: '20px' }}>
         <input
           type="text"
           placeholder="Full Name"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           required
-          style={{ padding: '10px', border: '1px solid #ddd', borderRadius: '4px' }}
         />
         <input
           type="email"
@@ -108,12 +105,10 @@ export default function Register() {
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           required
-          style={{ padding: '10px', border: '1px solid #ddd', borderRadius: '4px' }}
         />
         
         <div>
-          <input
-            type="password"
+          <PasswordField
             placeholder="Password"
             value={formData.password}
             onChange={handlePasswordChange}
@@ -124,8 +119,9 @@ export default function Register() {
               }
             }}
             required
-            style={{ 
+            inputStyle={{ 
               padding: '10px', 
+              paddingRight: '72px',
               border: formData.password && isPasswordValid ? '2px solid #28a745' : formData.password ? '2px solid #dc3545' : '1px solid #ddd',
               borderRadius: '4px',
               width: '100%',
@@ -180,7 +176,6 @@ export default function Register() {
           value={formData.userTypeId}
           onChange={(e) => setFormData({ ...formData, userTypeId: e.target.value })}
           required
-          style={{ padding: '10px', border: '1px solid #ddd', borderRadius: '4px' }}
         >
           <option value="" disabled>Select User Type</option>
           {userTypes.map((type) => (
@@ -193,15 +188,7 @@ export default function Register() {
         <button 
           type="submit" 
           disabled={!isPasswordValid && formData.password !== ''}
-          style={{ 
-            padding: '10px', 
-            backgroundColor: !isPasswordValid && formData.password !== '' ? '#cccccc' : '#28a745', 
-            color: 'white', 
-            border: 'none', 
-            borderRadius: '4px', 
-            cursor: !isPasswordValid && formData.password !== '' ? 'not-allowed' : 'pointer',
-            fontWeight: 'bold'
-          }}
+          className="btn btn-success"
         >
           Register
         </button>

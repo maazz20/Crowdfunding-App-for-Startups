@@ -71,4 +71,8 @@ A full-stack crowdfunding platform that connects startups with investors. Built 
 
 ```bash
 git clone <your-repo-url>
+<<<<<<< HEAD
 cd crowdfunding-platform
+=======
+cd crowdfunding-platform
+>>>>>>> f7b2e1d622c6eb34416cea0f074bdc1e57853bff

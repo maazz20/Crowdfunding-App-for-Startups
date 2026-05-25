@@ -5,6 +5,7 @@ import ContributionForm from '../components/ContributionForm';
 import './CampaignDetail.css';
 
 const formatAmount = (value) => Number(value || 0).toLocaleString();
+const formatDate = (value) => value ? new Date(value).toLocaleDateString() : 'Not set';
 
 export default function CampaignDetail() {
     const { id } = useParams();
@@ -36,6 +37,9 @@ export default function CampaignDetail() {
     const targetAmount = Number(campaign.targetAmount || 0);
     const progressPercent = targetAmount ? Math.min((currentAmount / targetAmount) * 100, 100) : 0;
     const currencySymbol = campaign.currency?.symbol || '$';
+    const creator = campaign.creator || {};
+    const creatorInitial = (creator.name || creator.email || 'U').charAt(0).toUpperCase();
+    const creatorType = creator.userType?.typeName || 'Startup';
 
     return (
         <div className="app-shell campaign-detail">
@@ -65,21 +69,46 @@ export default function CampaignDetail() {
             <div className="detail-grid">
                 <ContributionForm campaignId={campaign.id} campaign={campaign} currency={campaign.currency} onSuccess={() => window.location.reload()} />
 
-                <section className="surface panel">
-                    <h2>Recent Contributions</h2>
-                    {contributions.length === 0 ? (
-                        <p className="muted-text">No contributions yet. Be the first to back it.</p>
-                    ) : (
-                        <ul className="contributions-list">
-                            {contributions.map((contrib) => (
-                                <li key={contrib.id}>
-                                    <span>{contrib.contributor?.name || 'Backer'}</span>
-                                    <strong>{currencySymbol}{formatAmount(contrib.amount)}</strong>
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </section>
+                <aside className="detail-sidebar">
+                    <section className="surface panel creator-panel">
+                        <h2>Posted by</h2>
+                        <div className="creator-profile">
+                            <div className="creator-avatar" aria-hidden="true">{creatorInitial}</div>
+                            <div>
+                                <strong>{creator.name || 'Campaign creator'}</strong>
+                                <span>{creatorType}</span>
+                            </div>
+                        </div>
+                        <dl className="creator-meta">
+                            {creator.email && (
+                                <>
+                                    <dt>Email</dt>
+                                    <dd>{creator.email}</dd>
+                                </>
+                            )}
+                            <dt>Category</dt>
+                            <dd>{campaign.category?.categoryName || 'Startup'}</dd>
+                            <dt>Campaign posted</dt>
+                            <dd>{formatDate(campaign.createdAt)}</dd>
+                        </dl>
+                    </section>
+
+                    <section className="surface panel">
+                        <h2>Recent Contributions</h2>
+                        {contributions.length === 0 ? (
+                            <p className="muted-text">No contributions yet. Be the first to back it.</p>
+                        ) : (
+                            <ul className="contributions-list">
+                                {contributions.map((contrib) => (
+                                    <li key={contrib.id}>
+                                        <span>{contrib.contributor?.name || 'Backer'}</span>
+                                        <strong>{currencySymbol}{formatAmount(contrib.amount)}</strong>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </section>
+                </aside>
             </div>
         </div>
     );

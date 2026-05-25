@@ -1,4 +1,4 @@
-# Crowdfunding Platform
+
 
 A full-stack crowdfunding platform that connects startups with investors. Built with Spring Boot backend and React frontend, featuring secure authentication, campaign management, and payment integration.
 
@@ -75,4 +75,4 @@ git clone <your-repo-url>
 cd crowdfunding-platform
 =======
 cd crowdfunding-platform
->>>>>>> f7b2e1d622c6eb34416cea0f074bdc1e57853bff
+
